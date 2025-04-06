@@ -1,12 +1,20 @@
 package project.cursos.edufree.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import project.cursos.edufree.exception.BadRequestException;
+import project.cursos.edufree.exception.ConflictException;
+import project.cursos.edufree.exception.ResourceNotFoundException;
 import project.cursos.edufree.model.Curso;
 import project.cursos.edufree.model.Inscripcion;
 import project.cursos.edufree.model.Usuario;
 import project.cursos.edufree.repository.CursoRepository;
 import project.cursos.edufree.repository.InscripcionRepository;
 import project.cursos.edufree.repository.UsuarioRepository;
+import project.cursos.edufree.dto.InscripcionDTO;
+import project.cursos.edufree.dto.UsuarioDTO;
+import project.cursos.edufree.dto.CursoSimpleDTO;
+import project.cursos.edufree.dto.RolDTO;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -32,9 +40,11 @@ public class InscripcionService {
         return inscripcionRepository.findAll();
     }
 
-    public Optional<Inscripcion> obtenerPorId(Integer id) {
-        return inscripcionRepository.findById(id);
+    public Inscripcion obtenerPorId(Integer id) {
+        return inscripcionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Inscripción con ID " + id + " no encontrada"));
     }
+
 
     public List<Inscripcion> obtenerPorUsuario(Integer usuarioId) {
         return inscripcionRepository.findByUsuarioId(usuarioId);
@@ -44,25 +54,64 @@ public class InscripcionService {
         return inscripcionRepository.findByCursoId(cursoId);
     }
 
-    public Inscripcion crearInscripcion(Integer usuarioId, Integer cursoId) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
-        Optional<Curso> cursoOpt = cursoRepository.findById(cursoId);
 
-        if (usuarioOpt.isPresent() && cursoOpt.isPresent()) {
 
-            Optional<Inscripcion> existente = inscripcionRepository.findByUsuarioIdAndCursoId(usuarioId, cursoId);
-            if (existente.isPresent()) {
-                throw new RuntimeException("El usuario ya está inscrito en este curso");
-            }
-
-            Inscripcion inscripcion = new Inscripcion(usuarioOpt.get(), cursoOpt.get());
-            return inscripcionRepository.save(inscripcion);
-        } else {
-            throw new RuntimeException("Usuario o Curso no encontrado");
+    public Inscripcion crearInscripcion(Usuario usuario, Curso curso, String metodoPago) {
+        if (usuario == null || curso == null || metodoPago == null || metodoPago.isEmpty()) {
+            throw new BadRequestException("Debe proporcionar usuario, curso y método de pago");
         }
+
+        // Validar existencia
+        Usuario usuarioExistente = usuarioRepository.findById(usuario.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario con ID " + usuario.getId() + " no encontrado"));
+
+        Curso cursoExistente = cursoRepository.findById(curso.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Curso con ID " + curso.getId() + " no encontrado"));
+
+        if (inscripcionRepository.findByUsuarioIdAndCursoId(usuario.getId(), curso.getId()).isPresent()) {
+            throw new ConflictException("El usuario ya está inscrito en este curso");
+        }
+
+        Inscripcion inscripcion = new Inscripcion(usuarioExistente, cursoExistente, metodoPago);
+        return inscripcionRepository.save(inscripcion);
     }
+
+
 
     public void eliminarInscripcion(Integer id) {
         inscripcionRepository.deleteById(id);
+    }
+
+
+    public List<InscripcionDTO> obtenerTodasComoDTO() {
+        return inscripcionRepository.findAll().stream().map(inscripcion -> {
+            InscripcionDTO dto = new InscripcionDTO();
+            dto.setId(inscripcion.getId());
+            dto.setFechaInscripcion(inscripcion.getFechaInscripcion());
+
+            // UsuarioDTO
+            Usuario usuario = inscripcion.getUsuario();
+            UsuarioDTO usuarioDTO = new UsuarioDTO();
+            usuarioDTO.setId(usuario.getId());
+            usuarioDTO.setNombre(usuario.getNombre());
+            usuarioDTO.setEmail(usuario.getEmail());
+
+            RolDTO rolDTO = new RolDTO();
+            rolDTO.setId(usuario.getRol().getId());
+            rolDTO.setNombre(usuario.getRol().getNombre());
+            usuarioDTO.setRol(rolDTO);
+
+            dto.setUsuario(usuarioDTO);
+
+            // CursoSimpleDTO
+            Curso curso = inscripcion.getCurso();
+            CursoSimpleDTO cursoDTO = new CursoSimpleDTO();
+            cursoDTO.setId(curso.getId());
+            cursoDTO.setNombre(curso.getNombre());
+
+            dto.setCurso(cursoDTO);
+
+            return dto;
+        }).toList();
     }
 }

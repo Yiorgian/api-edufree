@@ -1,6 +1,5 @@
 package project.cursos.edufree.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -21,16 +20,19 @@ public class Inscripcion {
     @JoinColumn(name = "curso_id", nullable = false)
     private Curso curso;
 
-    @Column(nullable = false)
+    @Column(name = "metodo_pago", nullable = false)
+    private String metodoPago;
+
+    @Column(name = "fecha_inscripcion", nullable = false)
     private LocalDateTime fechaInscripcion = LocalDateTime.now();
 
     public Inscripcion() {}
 
-    public Inscripcion(Usuario usuario, Curso curso) {
+    public Inscripcion(Usuario usuario, Curso curso, String metodoPago) {
         this.usuario = usuario;
         this.curso = curso;
+        this.metodoPago = metodoPago;
     }
-
 
     public Integer getId() {
         return id;
@@ -56,6 +58,14 @@ public class Inscripcion {
         this.curso = curso;
     }
 
+    public String getMetodoPago() {
+        return metodoPago;
+    }
+
+    public void setMetodoPago(String metodoPago) {
+        this.metodoPago = metodoPago;
+    }
+
     public LocalDateTime getFechaInscripcion() {
         return fechaInscripcion;
     }
@@ -63,5 +73,4 @@ public class Inscripcion {
     public void setFechaInscripcion(LocalDateTime fechaInscripcion) {
         this.fechaInscripcion = fechaInscripcion;
     }
-
 }

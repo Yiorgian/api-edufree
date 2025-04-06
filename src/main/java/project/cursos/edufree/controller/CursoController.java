@@ -1,11 +1,13 @@
 package project.cursos.edufree.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.cursos.edufree.dto.Crear_Datos.CrearCursoDTO;
+import project.cursos.edufree.dto.CursoDTO;
 import project.cursos.edufree.model.Curso;
 import project.cursos.edufree.service.CursoService;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,8 +15,16 @@ import java.util.Optional;
 @RequestMapping("/api/cursos")
 public class CursoController {
 
-    @Autowired
-    private CursoService cursoService;
+    private final CursoService cursoService;
+
+    public CursoController(CursoService cursoService) {
+        this.cursoService = cursoService;
+    }
+
+    @GetMapping("/dto")
+    public ResponseEntity<List<CursoDTO>> listarCursosConTemasYSubtemas() {
+        return ResponseEntity.ok(cursoService.obtenerTodosComoDTO());
+    }
 
     @GetMapping
     public ResponseEntity<List<Curso>> obtenerTodos() {
@@ -23,10 +33,10 @@ public class CursoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Curso> obtenerPorId(@PathVariable Integer id) {
-        Optional<Curso> curso = cursoService.obtenerPorId(id);
-        return curso.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        Curso curso = cursoService.obtenerPorId(id);
+        return ResponseEntity.ok(curso);
     }
+
 
     @GetMapping("/administrador/{administradorId}")
     public ResponseEntity<List<Curso>> obtenerPorAdministrador(@PathVariable Integer administradorId) {
@@ -34,21 +44,35 @@ public class CursoController {
     }
 
     @PostMapping
-    public ResponseEntity<Curso> crearCurso(
-            @RequestParam String nombre,
-            @RequestParam String descripcion,
-            @RequestParam Integer administradorId) {
-        Curso curso = cursoService.crearCurso(nombre, descripcion, administradorId);
+    public ResponseEntity<Curso> crearCurso(@RequestBody CrearCursoDTO dto) {
+        Curso curso = cursoService.crearCurso(
+                dto.getNombre(),
+                dto.getDescripcion(),
+                dto.getPrecio(),
+                dto.getAdministradorId()
+        );
         return ResponseEntity.ok(curso);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Curso> actualizarCurso(
             @PathVariable Integer id,
-            @RequestParam String nombre,
-            @RequestParam String descripcion,
-            @RequestParam Integer administradorId) {
-        Curso curso = cursoService.actualizarCurso(id, nombre, descripcion, administradorId);
+            @RequestBody CrearCursoDTO dto) {
+        Curso curso = cursoService.actualizarCurso(
+                id,
+                dto.getNombre(),
+                dto.getDescripcion(),
+                dto.getPrecio(),
+                dto.getAdministradorId()
+        );
+        return ResponseEntity.ok(curso);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Curso> actualizarParcialCurso(
+            @PathVariable Integer id,
+            @RequestBody CrearCursoDTO dto) {
+        Curso curso = cursoService.actualizarCursoParcial(id, dto);
         return ResponseEntity.ok(curso);
     }
 

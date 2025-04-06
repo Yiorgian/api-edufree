@@ -1,12 +1,15 @@
 package project.cursos.edufree.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import project.cursos.edufree.dto.Crear_Datos.CrearNotificacionDTO;
+import project.cursos.edufree.exception.ResourceNotFoundException;
 import project.cursos.edufree.model.Notificacion;
 import project.cursos.edufree.model.Usuario;
 import project.cursos.edufree.repository.NotificacionRepository;
 import project.cursos.edufree.repository.UsuarioRepository;
-
+import project.cursos.edufree.dto.NotificacionDTO;
+import project.cursos.edufree.dto.UsuarioDTO;
+import project.cursos.edufree.dto.RolDTO;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +21,35 @@ public class NotificacionService {
 
     private final UsuarioRepository usuarioRepository;
 
+    public List<NotificacionDTO> obtenerTodasComoDTO() {
+        return notificacionRepository.findAll().stream().map(noti -> {
+            NotificacionDTO dto = new NotificacionDTO();
+            dto.setId(noti.getId());
+            dto.setMensaje(noti.getMensaje());
+            dto.setFechaEnvio(noti.getFechaEnvio());
+
+            UsuarioDTO usuarioDTO = new UsuarioDTO();
+            usuarioDTO.setId(noti.getUsuario().getId());
+            usuarioDTO.setNombre(noti.getUsuario().getNombre());
+            usuarioDTO.setEmail(noti.getUsuario().getEmail());
+
+            RolDTO rolDTO = new RolDTO();
+            rolDTO.setId(noti.getUsuario().getRol().getId());
+            rolDTO.setNombre(noti.getUsuario().getRol().getNombre());
+
+            usuarioDTO.setRol(rolDTO);
+            dto.setUsuario(usuarioDTO);
+
+            return dto;
+        }).toList();
+    }
+
+    public Notificacion obtenerPorId(Integer id) {
+        return notificacionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Notificación con ID " + id + " no encontrada"));
+    }
+
+
     public NotificacionService(NotificacionRepository notificacionRepository, UsuarioRepository usuarioRepository) {
         this.notificacionRepository = notificacionRepository;
         this.usuarioRepository = usuarioRepository;
@@ -28,25 +60,52 @@ public class NotificacionService {
     }
 
 
-    public Optional<Notificacion> obtenerPorId(Integer id) {
-        return notificacionRepository.findById(id);
-    }
-
     public List<Notificacion> obtenerPorUsuario(Integer usuarioId) {
         return notificacionRepository.findByUsuarioId(usuarioId);
     }
 
     public Notificacion crearNotificacion(Integer usuarioId, String mensaje) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
-        if (usuarioOpt.isPresent()) {
-            Notificacion notificacion = new Notificacion(usuarioOpt.get(), mensaje);
-            return notificacionRepository.save(notificacion);
-        } else {
-            throw new RuntimeException("Usuario no encontrado");
-        }
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario con ID " + usuarioId + " no encontrado"));
+
+        return notificacionRepository.save(new Notificacion(usuario, mensaje));
     }
+
+    public Notificacion actualizarNotificacion(Integer id, CrearNotificacionDTO dto) {
+        Notificacion notificacion = obtenerPorId(id);
+        Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario con ID " + dto.getUsuarioId() + " no encontrado"));
+
+        notificacion.setMensaje(dto.getMensaje());
+        notificacion.setUsuario(usuario);
+
+        return notificacionRepository.save(notificacion);
+    }
+
+    public Notificacion actualizarParcial(Integer id, CrearNotificacionDTO dto) {
+        Notificacion notificacion = obtenerPorId(id);
+
+        if (dto.getMensaje() != null) {
+            notificacion.setMensaje(dto.getMensaje());
+        }
+
+        if (dto.getUsuarioId() != null) {
+            Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Usuario con ID " + dto.getUsuarioId() + " no encontrado"));
+            notificacion.setUsuario(usuario);
+        }
+
+        return notificacionRepository.save(notificacion);
+    }
+
+
+
 
     public void eliminarNotificacion(Integer id) {
         notificacionRepository.deleteById(id);
     }
+
+
+
+
 }

@@ -2,12 +2,13 @@ package project.cursos.edufree.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +23,12 @@ public class Usuario {
     @JsonIgnore
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false, unique = true)
+    private String telefono;
+
+    @Column(name = "fecha_registro", updatable = false, nullable = false)
+    private Timestamp fechaRegistro = new Timestamp(System.currentTimeMillis());
 
     @ManyToOne
     @JoinColumn(name = "rol_id", nullable = false)
@@ -41,12 +48,16 @@ public class Usuario {
 
     public Usuario() {}
 
-    public Usuario(String nombre, String email, String password, Rol rol) {
+    public Usuario(String nombre, String email, String password, String telefono, Rol rol) {
         this.nombre = nombre;
         this.email = email;
         this.password = password;
+        this.telefono = telefono;
         this.rol = rol;
+        this.fechaRegistro = new Timestamp(System.currentTimeMillis());
     }
+
+    // Getters y Setters
 
     public Integer getId() {
         return id;
@@ -80,6 +91,22 @@ public class Usuario {
         this.password = password;
     }
 
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public Timestamp getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(Timestamp fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
+
     public Rol getRol() {
         return rol;
     }
@@ -111,9 +138,4 @@ public class Usuario {
     public void setNotificaciones(List<Notificacion> notificaciones) {
         this.notificaciones = notificaciones;
     }
-
-
-
-
-
 }

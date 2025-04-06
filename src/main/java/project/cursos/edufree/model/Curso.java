@@ -1,9 +1,9 @@
 package project.cursos.edufree.model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -20,6 +20,9 @@ public class Curso {
     @Column(nullable = false)
     private String descripcion;
 
+    @Column(nullable = false)
+    private BigDecimal precio;
+
     @ManyToOne
     @JoinColumn(name = "administrador_id", nullable = false)
     private Usuario administrador;
@@ -28,11 +31,15 @@ public class Curso {
     @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Inscripcion> inscripciones;
 
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Tema> temas;
+
     public Curso() {}
 
-    public Curso(String nombre, String descripcion, Usuario administrador) {
+    public Curso(String nombre, String descripcion, BigDecimal precio, Usuario administrador) {
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.precio = precio;
         this.administrador = administrador;
     }
 
@@ -60,6 +67,14 @@ public class Curso {
         this.descripcion = descripcion;
     }
 
+    public BigDecimal getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
+    }
+
     public Usuario getAdministrador() {
         return administrador;
     }
@@ -76,6 +91,11 @@ public class Curso {
         this.inscripciones = inscripciones;
     }
 
+    public List<Tema> getTemas() {
+        return temas;
+    }
 
-
+    public void setTemas(List<Tema> temas) {
+        this.temas = temas;
+    }
 }

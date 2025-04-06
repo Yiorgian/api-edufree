@@ -23,10 +23,10 @@ public class RolController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Rol> obtenerPorId(@PathVariable Integer id) {
-        Optional<Rol> rol = rolService.obtenerPorId(id);
-        return rol.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        Rol rol = rolService.obtenerPorId(id);
+        return ResponseEntity.ok(rol);
     }
+
 
     @GetMapping("/nombre/{nombre}")
     public ResponseEntity<Rol> obtenerPorNombre(@PathVariable String nombre) {
@@ -36,17 +36,9 @@ public class RolController {
     }
 
     @PostMapping
-    public ResponseEntity<Rol> crearRol(@RequestParam String nombre) {
-        Rol rol = rolService.crearRol(nombre);
-        return ResponseEntity.ok(rol);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Rol> actualizarRol(
-            @PathVariable Integer id,
-            @RequestParam String nombre) {
-        Rol rol = rolService.actualizarRol(id, nombre);
-        return ResponseEntity.ok(rol);
+    public ResponseEntity<Rol> crearRol(@RequestBody Rol rol) {
+        Rol nuevoRol = rolService.crearRol(rol.getNombre());
+        return ResponseEntity.ok(nuevoRol);
     }
 
     @DeleteMapping("/{id}")
