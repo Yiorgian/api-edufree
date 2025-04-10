@@ -1,5 +1,4 @@
 package project.cursos.edufree.controller;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.cursos.edufree.dto.Crear_Datos.CrearUsuarioDTO;
@@ -12,8 +11,11 @@ import java.util.List;
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
+
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Usuario>> obtenerTodos() {
@@ -26,6 +28,10 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
+    @GetMapping("/dto")
+    public ResponseEntity<List<UsuarioDTO>> obtenerTodosDTO() {
+        return ResponseEntity.ok(usuarioService.obtenerTodosComoDTO());
+    }
 
     @PostMapping
     public ResponseEntity<Usuario> crearUsuario(@RequestBody CrearUsuarioDTO dto) {
@@ -36,18 +42,8 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizarUsuario(
-            @PathVariable Integer id,
-            @RequestBody CrearUsuarioDTO dto) {
-
-        Usuario usuario = usuarioService.actualizarUsuario(
-                id,
-                dto.getNombre(),
-                dto.getEmail(),
-                dto.getPassword(),
-                dto.getTelefono(),
-                dto.getRolId()
-        );
+    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Integer id, @RequestBody CrearUsuarioDTO dto) {
+        Usuario usuario = usuarioService.actualizarUsuario(id, dto.getNombre(), dto.getEmail(), dto.getPassword(), dto.getTelefono(), dto.getRolId());
         return ResponseEntity.ok(usuario);
     }
 
@@ -60,14 +56,11 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioActualizado);
     }
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Integer id) {
         usuarioService.eliminarUsuario(id);
         return ResponseEntity.noContent().build();
     }
-    @GetMapping("/dto")
-    public ResponseEntity<List<UsuarioDTO>> obtenerTodosDTO() {
-        return ResponseEntity.ok(usuarioService.obtenerTodosComoDTO());
-    }
+
+
 }

@@ -1,6 +1,6 @@
 package project.cursos.edufree.service;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import project.cursos.edufree.dto.Filtrar_Datos.ResumenInscripcionDTO;
 import project.cursos.edufree.exception.BadRequestException;
 import project.cursos.edufree.exception.ConflictException;
 import project.cursos.edufree.exception.ResourceNotFoundException;
@@ -14,10 +14,7 @@ import project.cursos.edufree.dto.InscripcionDTO;
 import project.cursos.edufree.dto.UsuarioDTO;
 import project.cursos.edufree.dto.CursoSimpleDTO;
 import project.cursos.edufree.dto.RolDTO;
-
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class InscripcionService {
@@ -55,13 +52,25 @@ public class InscripcionService {
     }
 
 
+    public List<ResumenInscripcionDTO> obtenerInscripcionesPorUsuario(Integer usuarioId) {
+        return inscripcionRepository.obtenerInscripcionesPorUsuario(usuarioId)
+                .stream()
+                .map(p -> {
+                    ResumenInscripcionDTO dto = new ResumenInscripcionDTO();
+                    dto.setId(p.getId());
+                    dto.setUsuario(p.getUsuario());
+                    dto.setCurso(p.getCurso());
+                    dto.setMetodoPago(p.getMetodoPago());
+                    dto.setFechaInscripcion(p.getFechaInscripcion());
+                    return dto;
+                }).toList();
+    }
 
     public Inscripcion crearInscripcion(Usuario usuario, Curso curso, String metodoPago) {
         if (usuario == null || curso == null || metodoPago == null || metodoPago.isEmpty()) {
             throw new BadRequestException("Debe proporcionar usuario, curso y método de pago");
         }
 
-        // Validar existencia
         Usuario usuarioExistente = usuarioRepository.findById(usuario.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario con ID " + usuario.getId() + " no encontrado"));
 
@@ -88,8 +97,6 @@ public class InscripcionService {
             InscripcionDTO dto = new InscripcionDTO();
             dto.setId(inscripcion.getId());
             dto.setFechaInscripcion(inscripcion.getFechaInscripcion());
-
-            // UsuarioDTO
             Usuario usuario = inscripcion.getUsuario();
             UsuarioDTO usuarioDTO = new UsuarioDTO();
             usuarioDTO.setId(usuario.getId());
@@ -103,7 +110,6 @@ public class InscripcionService {
 
             dto.setUsuario(usuarioDTO);
 
-            // CursoSimpleDTO
             Curso curso = inscripcion.getCurso();
             CursoSimpleDTO cursoDTO = new CursoSimpleDTO();
             cursoDTO.setId(curso.getId());
@@ -114,4 +120,6 @@ public class InscripcionService {
             return dto;
         }).toList();
     }
+
+
 }

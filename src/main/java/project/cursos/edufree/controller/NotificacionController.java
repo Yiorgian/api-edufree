@@ -1,6 +1,5 @@
 package project.cursos.edufree.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.cursos.edufree.dto.Crear_Datos.CrearNotificacionDTO;
@@ -9,14 +8,17 @@ import project.cursos.edufree.model.Notificacion;
 import project.cursos.edufree.service.NotificacionService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/notificaciones")
 public class NotificacionController {
 
-    @Autowired
-    private NotificacionService notificacionService;
+    private final NotificacionService notificacionService;
+
+    public NotificacionController(NotificacionService notificacionService) {
+        this.notificacionService = notificacionService;
+    }
+
 
     @GetMapping
     public ResponseEntity<List<Notificacion>> obtenerTodas() {
@@ -29,11 +31,10 @@ public class NotificacionController {
         return ResponseEntity.ok(notificacion);
     }
 
+    @GetMapping("/dto")
+    public ResponseEntity<List<NotificacionDTO>> obtenerTodasDTO() {
+        return ResponseEntity.ok(notificacionService.obtenerTodasComoDTO());}
 
-    @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<List<Notificacion>> obtenerPorUsuario(@PathVariable Integer usuarioId) {
-        return ResponseEntity.ok(notificacionService.obtenerPorUsuario(usuarioId));
-    }
 
     @PostMapping
     public ResponseEntity<Notificacion> crearNotificacion(@RequestBody CrearNotificacionDTO dto) {
@@ -64,7 +65,5 @@ public class NotificacionController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/dto")
-    public ResponseEntity<List<NotificacionDTO>> obtenerTodasDTO() {
-        return ResponseEntity.ok(notificacionService.obtenerTodasComoDTO());}
+
 }

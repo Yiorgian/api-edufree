@@ -62,7 +62,6 @@ public class TemaController {
     }
 
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarTema(@PathVariable Integer id) {
         temaService.deleteTema(id);

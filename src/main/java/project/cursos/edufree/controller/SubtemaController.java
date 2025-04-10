@@ -23,10 +23,6 @@ public class SubtemaController {
         return ResponseEntity.ok(subtemaService.getAllSubtemas());
     }
 
-    @GetMapping("/tema/{temaId}")
-    public ResponseEntity<List<Subtema>> getSubtemasByTema(@PathVariable Integer temaId) {
-        return ResponseEntity.ok(subtemaService.getSubtemasByTema(temaId));
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Subtema> obtenerPorId(@PathVariable Integer id) {
@@ -34,6 +30,10 @@ public class SubtemaController {
         return ResponseEntity.ok(subtema);
     }
 
+    @GetMapping("/dto")
+    public ResponseEntity<List<SubtemaDTO>> listarSubtemas() {
+        return ResponseEntity.ok(subtemaService.obtenerTodosComoDTO());
+    }
 
     @PostMapping
     public ResponseEntity<Subtema> crear(@RequestBody CrearSubtemaDTO dto) {
@@ -59,8 +59,5 @@ public class SubtemaController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/dto")
-    public ResponseEntity<List<SubtemaDTO>> listarSubtemas() {
-        return ResponseEntity.ok(subtemaService.obtenerTodosComoDTO());
-    }
+
 }

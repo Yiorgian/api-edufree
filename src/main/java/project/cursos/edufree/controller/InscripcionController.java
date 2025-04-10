@@ -2,6 +2,7 @@ package project.cursos.edufree.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.cursos.edufree.dto.Filtrar_Datos.ResumenInscripcionDTO;
 import project.cursos.edufree.model.Curso;
 import project.cursos.edufree.model.Inscripcion;
 import project.cursos.edufree.model.Usuario;
@@ -9,13 +10,21 @@ import project.cursos.edufree.service.InscripcionService;
 import project.cursos.edufree.dto.InscripcionDTO;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/inscripciones")
 public class InscripcionController {
-    @Autowired
-    private InscripcionService inscripcionService;
+
+    private final InscripcionService inscripcionService;
+
+    public InscripcionController(InscripcionService inscripcionService) {
+        this.inscripcionService = inscripcionService;
+    }
+
+
+    @GetMapping("/dto")
+    public ResponseEntity<List<InscripcionDTO>> obtenerTodasDTO() {
+        return ResponseEntity.ok(inscripcionService.obtenerTodasComoDTO());}
 
     @GetMapping
     public ResponseEntity<List<Inscripcion>> obtenerTodas() {
@@ -28,15 +37,10 @@ public class InscripcionController {
         return ResponseEntity.ok(inscripcion);
     }
 
-
     @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<List<Inscripcion>> obtenerPorUsuario(@PathVariable Integer usuarioId) {
-        return ResponseEntity.ok(inscripcionService.obtenerPorUsuario(usuarioId));
-    }
-
-    @GetMapping("/curso/{cursoId}")
-    public ResponseEntity<List<Inscripcion>> obtenerPorCurso(@PathVariable Integer cursoId) {
-        return ResponseEntity.ok(inscripcionService.obtenerPorCurso(cursoId));
+    public ResponseEntity<List<ResumenInscripcionDTO>> obtenerInscripcionesPorUsuario(@PathVariable Integer usuarioId) {
+        List<ResumenInscripcionDTO> inscripciones = inscripcionService.obtenerInscripcionesPorUsuario(usuarioId);
+        return ResponseEntity.ok(inscripciones);
     }
 
     @PostMapping
@@ -60,7 +64,5 @@ public class InscripcionController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/dto")
-    public ResponseEntity<List<InscripcionDTO>> obtenerTodasDTO() {
-        return ResponseEntity.ok(inscripcionService.obtenerTodasComoDTO());}
+
 }

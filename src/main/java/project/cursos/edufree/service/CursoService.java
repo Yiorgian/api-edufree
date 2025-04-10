@@ -3,6 +3,7 @@ package project.cursos.edufree.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import project.cursos.edufree.dto.CursoDTO;
+import project.cursos.edufree.dto.Filtrar_Datos.CursoDetalleDTO;
 import project.cursos.edufree.model.Curso;
 import project.cursos.edufree.model.Usuario;
 import project.cursos.edufree.repository.CursoRepository;
@@ -13,6 +14,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import project.cursos.edufree.dto.Crear_Datos.CrearCursoDTO;
+import project.cursos.edufree.repository.projection.CursoAdministradorProjection;
+import project.cursos.edufree.repository.projection.CursoDetalleProjection;
+import project.cursos.edufree.repository.projection.CursoPalabraClaveProjection;
+import project.cursos.edufree.repository.projection.CursoPrecioProjection;
 
 @Service
 public class CursoService {
@@ -39,6 +44,18 @@ public class CursoService {
     public Curso obtenerPorId(Integer id) {
         return cursoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Curso con ID " + id + " no encontrado"));
+    }
+
+    public CursoDetalleDTO obtenerCursoDetalle(Integer cursoId) {
+        CursoDetalleProjection p = cursoRepository.obtenerCursoDetalle(cursoId);
+        CursoDetalleDTO dto = new CursoDetalleDTO();
+        dto.setId(p.getId());
+        dto.setNombre(p.getNombre());
+        dto.setDescripcion(p.getDescripcion());
+        dto.setPrecio(p.getPrecio());
+        dto.setFechaCreacion(p.getFechaCreacion());
+        dto.setAdministrador(p.getAdministrador());
+        return dto;
     }
 
 
@@ -83,6 +100,51 @@ public class CursoService {
         }
 
         return cursoRepository.save(curso);
+    }
+
+    public List<CursoDetalleDTO> filtrarCursosPorPrecio(BigDecimal precioMin, BigDecimal precioMax) {
+        List<CursoPrecioProjection> projections = cursoRepository.filtrarCursosPorPrecio(precioMin, precioMax);
+        return projections.stream().map(proj -> {
+            CursoDetalleDTO dto = new CursoDetalleDTO();
+            dto.setId(proj.getId());
+            dto.setNombre(proj.getNombre());
+            dto.setDescripcion(proj.getDescripcion());
+            // Convertimos el precio (Double) a BigDecimal
+            dto.setPrecio(BigDecimal.valueOf(proj.getPrecio()));
+            dto.setFechaCreacion(proj.getFecha_creacion());
+            dto.setAdministrador(proj.getAdministrador());
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+    public List<CursoDetalleDTO> filtrarCursosPorAdministrador(Integer administradorId) {
+        List<CursoAdministradorProjection> projections =
+                cursoRepository.filtrarCursosPorAdministrador(administradorId);
+        return projections.stream().map(proj -> {
+            CursoDetalleDTO dto = new CursoDetalleDTO();
+            dto.setId(proj.getId());
+            dto.setNombre(proj.getNombre());
+            dto.setDescripcion(proj.getDescripcion());
+            dto.setPrecio(BigDecimal.valueOf(proj.getPrecio()));
+            dto.setFechaCreacion(proj.getFecha_creacion());
+            dto.setAdministrador(proj.getAdministrador());
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+    public List<CursoDetalleDTO> filtrarCursosPorPalabraClave(String palabra) {
+        List<CursoPalabraClaveProjection> projections = cursoRepository.filtrarCursosPorPalabraClave(palabra);
+        return projections.stream().map(proj -> {
+            CursoDetalleDTO dto = new CursoDetalleDTO();
+            dto.setId(proj.getId());
+            dto.setNombre(proj.getNombre());
+            dto.setDescripcion(proj.getDescripcion());
+            // Convertimos el precio (Double) a BigDecimal
+            dto.setPrecio(BigDecimal.valueOf(proj.getPrecio()));
+            dto.setFechaCreacion(proj.getFecha_creacion());
+            dto.setAdministrador(proj.getAdministrador());
+            return dto;
+        }).collect(Collectors.toList());
     }
 
 

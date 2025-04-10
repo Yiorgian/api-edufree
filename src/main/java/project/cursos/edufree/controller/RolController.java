@@ -1,20 +1,22 @@
 package project.cursos.edufree.controller;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.cursos.edufree.model.Rol;
 import project.cursos.edufree.service.RolService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/roles")
 public class RolController {
 
 
-    @Autowired
-    private RolService rolService;
+
+    private final RolService rolService;
+
+    public RolController(RolService rolService) {
+        this.rolService = rolService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Rol>> obtenerTodos() {
@@ -27,13 +29,6 @@ public class RolController {
         return ResponseEntity.ok(rol);
     }
 
-
-    @GetMapping("/nombre/{nombre}")
-    public ResponseEntity<Rol> obtenerPorNombre(@PathVariable String nombre) {
-        Optional<Rol> rol = rolService.obtenerPorNombre(nombre);
-        return rol.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
 
     @PostMapping
     public ResponseEntity<Rol> crearRol(@RequestBody Rol rol) {
