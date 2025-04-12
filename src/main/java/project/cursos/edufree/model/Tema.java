@@ -1,13 +1,12 @@
 package project.cursos.edufree.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "temas")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Tema {
 
     @Id
@@ -18,15 +17,19 @@ public class Tema {
     private String nombre;
 
     private String descripcion;
-
+    
     @ManyToOne
     @JoinColumn(name = "curso_id", nullable = false)
+    @JsonBackReference(value = "curso-temas")
     private Curso curso;
 
     @OneToMany(mappedBy = "tema", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "tema-subtemas")
     private List<Subtema> subtemas;
 
-    // Getters y Setters
+    public Tema() {
+    }
+
 
     public Integer getId() {
         return id;

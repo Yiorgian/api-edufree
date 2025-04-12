@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import project.cursos.edufree.dto.Crear_Datos.CrearSubtemaDTO;
 import project.cursos.edufree.model.Subtema;
 import project.cursos.edufree.service.SubtemaService;
-import project.cursos.edufree.dto.SubtemaDTO;
+
 import java.util.List;
 
 @RestController
@@ -28,11 +28,6 @@ public class SubtemaController {
     public ResponseEntity<Subtema> obtenerPorId(@PathVariable Integer id) {
         Subtema subtema = subtemaService.obtenerPorId(id);
         return ResponseEntity.ok(subtema);
-    }
-
-    @GetMapping("/dto")
-    public ResponseEntity<List<SubtemaDTO>> listarSubtemas() {
-        return ResponseEntity.ok(subtemaService.obtenerTodosComoDTO());
     }
 
     @PostMapping

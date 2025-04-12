@@ -6,8 +6,6 @@ public class UsuarioDTO {
     private String email;
     private RolDTO rol;
 
-    // Getters y Setters
-
     public Integer getId() {
         return id;
     }

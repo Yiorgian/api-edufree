@@ -20,7 +20,6 @@ public class Usuario {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
@@ -56,8 +55,6 @@ public class Usuario {
         this.rol = rol;
         this.fechaRegistro = new Timestamp(System.currentTimeMillis());
     }
-
-    // Getters y Setters
 
     public Integer getId() {
         return id;

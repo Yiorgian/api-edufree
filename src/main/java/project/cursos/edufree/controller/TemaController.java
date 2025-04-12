@@ -3,7 +3,6 @@ package project.cursos.edufree.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.cursos.edufree.dto.Crear_Datos.CrearTemaDTO;
-import project.cursos.edufree.dto.TemaDTO;
 import project.cursos.edufree.model.Tema;
 import project.cursos.edufree.service.TemaService;
 
@@ -23,12 +22,6 @@ public class TemaController {
     public ResponseEntity<List<Tema>> getAllTemas() {
         return ResponseEntity.ok(temaService.getAllTemas());
     }
-
-    @GetMapping("/dto")
-    public ResponseEntity<List<TemaDTO>> getAllTemasDTO() {
-        return ResponseEntity.ok(temaService.obtenerTodosComoDTO());
-    }
-
 
     @GetMapping("/{id}")
     public ResponseEntity<Tema> getTemaById(@PathVariable Integer id) {

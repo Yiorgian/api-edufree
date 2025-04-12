@@ -1,12 +1,10 @@
 package project.cursos.edufree.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "subtemas")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Subtema {
 
     @Id
@@ -21,9 +19,9 @@ public class Subtema {
 
     @ManyToOne
     @JoinColumn(name = "tema_id", nullable = false)
+    @JsonBackReference(value = "tema-subtemas")
     private Tema tema;
-
-    // Getters y Setters
+    
 
     public Integer getId() {
         return id;

@@ -5,7 +5,6 @@ public class CrearTemaDTO {
     private String descripcion;
     private Integer cursoId;
 
-    // Getters y Setters
     public String getNombre() {
         return nombre;
     }

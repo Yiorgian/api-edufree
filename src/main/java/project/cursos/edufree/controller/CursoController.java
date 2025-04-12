@@ -3,7 +3,6 @@ package project.cursos.edufree.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.cursos.edufree.dto.Crear_Datos.CrearCursoDTO;
-import project.cursos.edufree.dto.CursoDTO;
 import project.cursos.edufree.dto.Filtrar_Datos.CursoDetalleDTO;
 import project.cursos.edufree.model.Curso;
 import project.cursos.edufree.service.CursoService;
@@ -19,11 +18,6 @@ public class CursoController {
 
     public CursoController(CursoService cursoService) {
         this.cursoService = cursoService;
-    }
-
-    @GetMapping("/dto")
-    public ResponseEntity<List<CursoDTO>> listarCursosConTemasYSubtemas() {
-        return ResponseEntity.ok(cursoService.obtenerTodosComoDTO());
     }
 
     @GetMapping

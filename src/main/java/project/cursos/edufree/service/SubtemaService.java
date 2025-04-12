@@ -4,8 +4,6 @@ import org.springframework.stereotype.Service;
 import project.cursos.edufree.dto.Crear_Datos.CrearSubtemaDTO;
 import project.cursos.edufree.exception.ResourceNotFoundException;
 import project.cursos.edufree.model.Subtema;
-import project.cursos.edufree.dto.SubtemaDTO;
-import java.util.stream.Collectors;
 
 import project.cursos.edufree.model.Tema;
 import project.cursos.edufree.repository.SubtemaRepository;
@@ -83,18 +81,6 @@ public class SubtemaService {
         }
 
         return subtemaRepository.save(subtema);
-    }
-
-    public List<SubtemaDTO> obtenerTodosComoDTO() {
-        List<Subtema> subtemas = subtemaRepository.findAll();
-
-        return subtemas.stream().map(sub -> {
-            SubtemaDTO dto = new SubtemaDTO();
-            dto.setId(sub.getId());
-            dto.setNombre(sub.getNombre());
-            dto.setTiempo(sub.getTiempo());
-            return dto;
-        }).collect(Collectors.toList());
     }
 
 

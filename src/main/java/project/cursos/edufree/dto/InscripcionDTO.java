@@ -8,7 +8,6 @@ public class InscripcionDTO {
     private CursoSimpleDTO curso;
     private LocalDateTime fechaInscripcion;
 
-    // Getters y Setters
     public Integer getId() {
         return id;
     }

@@ -2,7 +2,6 @@ package project.cursos.edufree.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import project.cursos.edufree.dto.CursoDTO;
 import project.cursos.edufree.dto.Filtrar_Datos.CursoDetalleDTO;
 import project.cursos.edufree.model.Curso;
 import project.cursos.edufree.model.Usuario;
@@ -70,19 +69,18 @@ public class CursoService {
     }
 
     public Curso actualizarCurso(Integer id, String nombre, String descripcion, BigDecimal precio, Integer administradorId) {
-        Optional<Curso> cursoOpt = cursoRepository.findById(id);
-        Optional<Usuario> adminOpt = usuarioRepository.findById(administradorId);
+        Curso curso = cursoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Curso con ID " + id + " no encontrado"));
 
-        if (cursoOpt.isPresent() && adminOpt.isPresent()) {
-            Curso curso = cursoOpt.get();
-            curso.setNombre(nombre);
-            curso.setDescripcion(descripcion);
-            curso.setPrecio(precio);
-            curso.setAdministrador(adminOpt.get());
-            return cursoRepository.save(curso);
-        } else {
-            throw new RuntimeException("Curso o Administrador no encontrado");
-        }
+        Usuario administrador = usuarioRepository.findById(administradorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Administrador con ID " + administradorId + " no encontrado"));
+
+        curso.setNombre(nombre);
+        curso.setDescripcion(descripcion);
+        curso.setPrecio(precio);
+        curso.setAdministrador(administrador);
+
+        return cursoRepository.save(curso);
     }
 
     public Curso actualizarCursoParcial(Integer id, CrearCursoDTO dto) {
@@ -109,7 +107,6 @@ public class CursoService {
             dto.setId(proj.getId());
             dto.setNombre(proj.getNombre());
             dto.setDescripcion(proj.getDescripcion());
-            // Convertimos el precio (Double) a BigDecimal
             dto.setPrecio(BigDecimal.valueOf(proj.getPrecio()));
             dto.setFechaCreacion(proj.getFecha_creacion());
             dto.setAdministrador(proj.getAdministrador());
@@ -139,7 +136,6 @@ public class CursoService {
             dto.setId(proj.getId());
             dto.setNombre(proj.getNombre());
             dto.setDescripcion(proj.getDescripcion());
-            // Convertimos el precio (Double) a BigDecimal
             dto.setPrecio(BigDecimal.valueOf(proj.getPrecio()));
             dto.setFechaCreacion(proj.getFecha_creacion());
             dto.setAdministrador(proj.getAdministrador());
@@ -152,10 +148,10 @@ public class CursoService {
         cursoRepository.deleteById(id);
     }
 
-    public List<CursoDTO> obtenerTodosComoDTO() {
+    public List<Curso> obtenerTodosComoDTO() {
         List<Curso> cursos = cursoRepository.findAll();
         return cursos.stream()
-                .map(curso -> modelMapper.map(curso, CursoDTO.class))
+                .map(curso -> modelMapper.map(curso, Curso.class))
                 .collect(Collectors.toList());
     }
 }

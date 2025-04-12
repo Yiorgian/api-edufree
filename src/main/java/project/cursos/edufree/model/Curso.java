@@ -1,8 +1,9 @@
 package project.cursos.edufree.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class Curso {
 
     @ManyToOne
     @JoinColumn(name = "administrador_id", nullable = false)
+    @JsonIgnoreProperties("rol")
     private Usuario administrador;
 
     @JsonIgnore
@@ -32,9 +34,11 @@ public class Curso {
     private List<Inscripcion> inscripciones;
 
     @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "curso-temas")
     private List<Tema> temas;
 
-    public Curso() {}
+    public Curso() {
+    }
 
     public Curso(String nombre, String descripcion, BigDecimal precio, Usuario administrador) {
         this.nombre = nombre;

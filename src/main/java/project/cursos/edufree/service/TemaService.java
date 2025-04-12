@@ -2,8 +2,6 @@ package project.cursos.edufree.service;
 
 import org.springframework.stereotype.Service;
 import project.cursos.edufree.dto.Crear_Datos.CrearTemaDTO;
-import project.cursos.edufree.dto.SubtemaDTO;
-import project.cursos.edufree.dto.TemaDTO;
 import project.cursos.edufree.exception.ResourceNotFoundException;
 import project.cursos.edufree.model.Curso;
 import project.cursos.edufree.model.Tema;
@@ -11,7 +9,6 @@ import project.cursos.edufree.repository.CursoRepository;
 import project.cursos.edufree.repository.TemaRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TemaService {
@@ -88,26 +85,4 @@ public class TemaService {
         return temaRepository.save(tema);
     }
 
-
-    public List<TemaDTO> obtenerTodosComoDTO() {
-        List<Tema> temas = temaRepository.findAll();
-
-        return temas.stream().map(tema -> {
-            TemaDTO dto = new TemaDTO();
-            dto.setId(tema.getId());
-            dto.setNombre(tema.getNombre());
-            dto.setDescripcion(tema.getDescripcion());
-
-            List<SubtemaDTO> subtemas = tema.getSubtemas().stream().map(sub -> {
-                SubtemaDTO subDTO = new SubtemaDTO();
-                subDTO.setId(sub.getId());
-                subDTO.setNombre(sub.getNombre());
-                subDTO.setTiempo(sub.getTiempo());
-                return subDTO;
-            }).toList();
-
-            dto.setSubtemas(subtemas);
-            return dto;
-        }).collect(Collectors.toList());
-    }
 }

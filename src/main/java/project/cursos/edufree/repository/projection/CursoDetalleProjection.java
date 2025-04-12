@@ -1,9 +1,6 @@
 package project.cursos.edufree.repository.projection;
 
-import project.cursos.edufree.dto.TemaDTO;
-
 import java.math.BigDecimal;
-import java.util.List;
 
 public interface CursoDetalleProjection {
     Integer getId();
@@ -12,5 +9,4 @@ public interface CursoDetalleProjection {
     BigDecimal getPrecio();
     String getFechaCreacion();
     String getAdministrador();
-    List<TemaDTO> getTemas();
 }
