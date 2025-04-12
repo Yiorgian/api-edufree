@@ -4,7 +4,6 @@ public class RolDTO {
     private Integer id;
     private String nombre;
 
-
     public Integer getId() {
         return id;
     }

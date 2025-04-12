@@ -11,13 +11,12 @@ public class Notificacion {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    @Column(nullable = false)
     private String mensaje;
 
-    @Column(nullable = false)
+
     private LocalDateTime fechaEnvio = LocalDateTime.now();
 
     public Notificacion() {}

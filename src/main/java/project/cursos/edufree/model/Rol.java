@@ -12,7 +12,6 @@ public class Rol {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, unique = true)
     private String nombre;
 
     @JsonIgnore

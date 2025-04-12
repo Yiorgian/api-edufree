@@ -4,7 +4,6 @@ public class CursoSimpleDTO {
     private Integer id;
     private String nombre;
 
-    // Getters y Setters
     public Integer getId() {
         return id;
     }

@@ -23,22 +23,17 @@ public class CursoService {
 
     private final CursoRepository cursoRepository;
     private final UsuarioRepository usuarioRepository;
-    private final ModelMapper modelMapper;
+
 
     public CursoService(CursoRepository cursoRepository, UsuarioRepository usuarioRepository, ModelMapper modelMapper) {
         this.cursoRepository = cursoRepository;
         this.usuarioRepository = usuarioRepository;
-        this.modelMapper = modelMapper;
     }
 
     public List<Curso> obtenerTodos() {
         return cursoRepository.findAll();
     }
 
-
-    public List<Curso> obtenerPorAdministrador(Integer administradorId) {
-        return cursoRepository.findByAdministradorId(administradorId);
-    }
 
     public Curso obtenerPorId(Integer id) {
         return cursoRepository.findById(id)
@@ -148,10 +143,5 @@ public class CursoService {
         cursoRepository.deleteById(id);
     }
 
-    public List<Curso> obtenerTodosComoDTO() {
-        List<Curso> cursos = cursoRepository.findAll();
-        return cursos.stream()
-                .map(curso -> modelMapper.map(curso, Curso.class))
-                .collect(Collectors.toList());
-    }
+
 }

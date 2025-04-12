@@ -13,17 +13,15 @@ public class Inscripcion {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     @ManyToOne
-    @JoinColumn(name = "curso_id", nullable = false)
+    @JoinColumn(name = "curso_id")
     private Curso curso;
 
-    @Column(name = "metodo_pago", nullable = false)
     private String metodoPago;
 
-    @Column(name = "fecha_inscripcion", nullable = false)
     private LocalDateTime fechaInscripcion = LocalDateTime.now();
 
     public Inscripcion() {}

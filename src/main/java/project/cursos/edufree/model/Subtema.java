@@ -11,17 +11,16 @@ public class Subtema {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false)
     private Integer tiempo;
 
     @ManyToOne
-    @JoinColumn(name = "tema_id", nullable = false)
+    @JoinColumn(name = "tema_id")
     @JsonBackReference(value = "tema-subtemas")
+
     private Tema tema;
-    
+
 
     public Integer getId() {
         return id;

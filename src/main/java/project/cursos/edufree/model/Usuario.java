@@ -12,25 +12,21 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer id;
 
-    @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, unique = true)
     private String telefono;
 
-    @Column(name = "fecha_registro", updatable = false, nullable = false)
     private Timestamp fechaRegistro = new Timestamp(System.currentTimeMillis());
 
     @ManyToOne
-    @JoinColumn(name = "rol_id", nullable = false)
+    @JoinColumn(name = "rol_id")
     private Rol rol;
 
     @JsonIgnore

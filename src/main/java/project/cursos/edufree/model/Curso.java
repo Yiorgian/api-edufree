@@ -15,17 +15,14 @@ public class Curso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false)
     private String descripcion;
 
-    @Column(nullable = false)
     private BigDecimal precio;
 
     @ManyToOne
-    @JoinColumn(name = "administrador_id", nullable = false)
+    @JoinColumn(name = "administrador_id")
     @JsonIgnoreProperties("rol")
     private Usuario administrador;
 

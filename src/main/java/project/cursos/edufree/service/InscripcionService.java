@@ -1,7 +1,6 @@
 package project.cursos.edufree.service;
 import org.springframework.stereotype.Service;
 import project.cursos.edufree.dto.Filtrar_Datos.ResumenInscripcionDTO;
-import project.cursos.edufree.exception.BadRequestException;
 import project.cursos.edufree.exception.ConflictException;
 import project.cursos.edufree.exception.ResourceNotFoundException;
 import project.cursos.edufree.model.Curso;
@@ -67,9 +66,6 @@ public class InscripcionService {
     }
 
     public Inscripcion crearInscripcion(Usuario usuario, Curso curso, String metodoPago) {
-        if (usuario == null || curso == null || metodoPago == null || metodoPago.isEmpty()) {
-            throw new BadRequestException("Debe proporcionar usuario, curso y método de pago");
-        }
 
         Usuario usuarioExistente = usuarioRepository.findById(usuario.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario con ID " + usuario.getId() + " no encontrado"));

@@ -1,5 +1,6 @@
 package project.cursos.edufree.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.cursos.edufree.dto.Crear_Datos.CrearCursoDTO;
@@ -46,7 +47,7 @@ public class CursoController {
     }
 
     @PostMapping
-    public ResponseEntity<Curso> crearCurso(@RequestBody CrearCursoDTO dto) {
+    public ResponseEntity<Curso> crearCurso(@Valid @RequestBody CrearCursoDTO dto) {
         Curso curso = cursoService.crearCurso(
                 dto.getNombre(),
                 dto.getDescripcion(),
@@ -55,6 +56,7 @@ public class CursoController {
         );
         return ResponseEntity.ok(curso);
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Curso> actualizarCurso(
