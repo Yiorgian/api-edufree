@@ -46,6 +46,19 @@ public class CursoController {
         return ResponseEntity.ok(cursos);
     }
 
+    @GetMapping("/administrador")
+    public ResponseEntity<List<CursoDetalleDTO>> filtrarCursosPorAdministrador(
+            @RequestParam("id") Integer administradorId) {
+        List<CursoDetalleDTO> cursos = cursoService.filtrarCursosPorAdministrador(administradorId);
+        return ResponseEntity.ok(cursos);
+    }
+
+    @GetMapping("/palabra")
+    public ResponseEntity<List<CursoDetalleDTO>> filtrarCursosPorPalabraClave(@RequestParam("palabra") String palabra) {
+        List<CursoDetalleDTO> cursos = cursoService.filtrarCursosPorPalabraClave(palabra);
+        return ResponseEntity.ok(cursos);
+    }
+
     @PostMapping
     public ResponseEntity<Curso> crearCurso(@Valid @RequestBody CrearCursoDTO dto) {
         Curso curso = cursoService.crearCurso(
@@ -67,18 +80,6 @@ public class CursoController {
         return ResponseEntity.ok(curso);
     }
 
-    @GetMapping("/administrador")
-    public ResponseEntity<List<CursoDetalleDTO>> filtrarCursosPorAdministrador(
-            @RequestParam("id") Integer administradorId) {
-        List<CursoDetalleDTO> cursos = cursoService.filtrarCursosPorAdministrador(administradorId);
-        return ResponseEntity.ok(cursos);
-    }
-
-    @GetMapping("/palabra")
-    public ResponseEntity<List<CursoDetalleDTO>> filtrarCursosPorPalabraClave(@RequestParam("palabra") String palabra) {
-        List<CursoDetalleDTO> cursos = cursoService.filtrarCursosPorPalabraClave(palabra);
-        return ResponseEntity.ok(cursos);
-    }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Curso> actualizarParcialCurso(

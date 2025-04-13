@@ -1,5 +1,4 @@
 package project.cursos.edufree.repository.projection;
-import java.math.BigDecimal;
 
 public interface CursoPrecioProjection {
     Integer getId();

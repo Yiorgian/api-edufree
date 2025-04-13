@@ -9,7 +9,6 @@ public class CursoDetalleDTO {
     private String fechaCreacion;
     private String administrador;
 
-
     public Integer getId() {
         return id;
     }

@@ -7,7 +7,7 @@ import project.cursos.edufree.model.Usuario;
 import project.cursos.edufree.repository.RolRepository;
 import project.cursos.edufree.repository.UsuarioRepository;
 import project.cursos.edufree.dto.UsuarioDTO;
-import project.cursos.edufree.dto.RolDTO;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -72,7 +72,6 @@ public class UsuarioService {
         if (usuarioParcial.getTelefono() != null) usuario.setTelefono(usuarioParcial.getTelefono());
         if (usuarioParcial.getPassword() != null) usuario.setPassword(usuarioParcial.getPassword());
 
-        // Validar si viene un rol (relación)
         if (usuarioParcial.getRol() != null && usuarioParcial.getRol().getId() != null) {
             Integer rolId = usuarioParcial.getRol().getId();
             Rol rol = rolRepository.findById(rolId)
@@ -94,16 +93,12 @@ public class UsuarioService {
             dto.setId(usuario.getId());
             dto.setNombre(usuario.getNombre());
             dto.setEmail(usuario.getEmail());
-
-            RolDTO rolDTO = new RolDTO();
-            rolDTO.setId(usuario.getRol().getId());
-            rolDTO.setNombre(usuario.getRol().getNombre());
-
-            dto.setRol(rolDTO);
+            dto.setRol(usuario.getRol());
 
             return dto;
         }).toList();
     }
+
 
 
 }

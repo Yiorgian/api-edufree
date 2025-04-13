@@ -9,9 +9,8 @@ import project.cursos.edufree.repository.NotificacionRepository;
 import project.cursos.edufree.repository.UsuarioRepository;
 import project.cursos.edufree.dto.NotificacionDTO;
 import project.cursos.edufree.dto.UsuarioDTO;
-import project.cursos.edufree.dto.RolDTO;
+
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class NotificacionService {
@@ -33,16 +32,13 @@ public class NotificacionService {
             usuarioDTO.setNombre(noti.getUsuario().getNombre());
             usuarioDTO.setEmail(noti.getUsuario().getEmail());
 
-            RolDTO rolDTO = new RolDTO();
-            rolDTO.setId(noti.getUsuario().getRol().getId());
-            rolDTO.setNombre(noti.getUsuario().getRol().getNombre());
-
-            usuarioDTO.setRol(rolDTO);
+            usuarioDTO.setRol(noti.getUsuario().getRol());
             dto.setUsuario(usuarioDTO);
 
             return dto;
         }).toList();
     }
+
 
     public Notificacion obtenerPorId(Integer id) {
         return notificacionRepository.findById(id)

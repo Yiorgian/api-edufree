@@ -3,6 +3,7 @@ package project.cursos.edufree.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
+
 @Entity
 @Table(name = "roles")
 public class Rol {

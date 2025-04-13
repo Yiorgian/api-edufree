@@ -12,7 +12,7 @@ import project.cursos.edufree.repository.UsuarioRepository;
 import project.cursos.edufree.dto.InscripcionDTO;
 import project.cursos.edufree.dto.UsuarioDTO;
 import project.cursos.edufree.dto.CursoSimpleDTO;
-import project.cursos.edufree.dto.RolDTO;
+
 import java.util.List;
 
 @Service
@@ -40,16 +40,6 @@ public class InscripcionService {
         return inscripcionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Inscripción con ID " + id + " no encontrada"));
     }
-
-
-    public List<Inscripcion> obtenerPorUsuario(Integer usuarioId) {
-        return inscripcionRepository.findByUsuarioId(usuarioId);
-    }
-
-    public List<Inscripcion> obtenerPorCurso(Integer cursoId) {
-        return inscripcionRepository.findByCursoId(cursoId);
-    }
-
 
     public List<ResumenInscripcionDTO> obtenerInscripcionesPorUsuario(Integer usuarioId) {
         return inscripcionRepository.obtenerInscripcionesPorUsuario(usuarioId)
@@ -83,11 +73,6 @@ public class InscripcionService {
 
 
 
-    public void eliminarInscripcion(Integer id) {
-        inscripcionRepository.deleteById(id);
-    }
-
-
     public List<InscripcionDTO> obtenerTodasComoDTO() {
         return inscripcionRepository.findAll().stream().map(inscripcion -> {
             InscripcionDTO dto = new InscripcionDTO();
@@ -98,24 +83,20 @@ public class InscripcionService {
             usuarioDTO.setId(usuario.getId());
             usuarioDTO.setNombre(usuario.getNombre());
             usuarioDTO.setEmail(usuario.getEmail());
-
-            RolDTO rolDTO = new RolDTO();
-            rolDTO.setId(usuario.getRol().getId());
-            rolDTO.setNombre(usuario.getRol().getNombre());
-            usuarioDTO.setRol(rolDTO);
-
+            usuarioDTO.setRol(usuario.getRol());
             dto.setUsuario(usuarioDTO);
-
             Curso curso = inscripcion.getCurso();
             CursoSimpleDTO cursoDTO = new CursoSimpleDTO();
             cursoDTO.setId(curso.getId());
             cursoDTO.setNombre(curso.getNombre());
-
             dto.setCurso(cursoDTO);
 
             return dto;
         }).toList();
     }
 
+    public void eliminarInscripcion(Integer id) {
+        inscripcionRepository.deleteById(id);
+    }
 
 }

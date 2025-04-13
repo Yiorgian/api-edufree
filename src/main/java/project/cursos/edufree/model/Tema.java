@@ -18,7 +18,7 @@ public class Tema {
     private String descripcion;
 
     @ManyToOne
-    @JoinColumn(name = "curso_id", nullable = false)
+    @JoinColumn(name = "curso_id")
     @JsonBackReference(value = "curso-temas")
     private Curso curso;
 

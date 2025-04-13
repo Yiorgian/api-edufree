@@ -1,4 +1,5 @@
 package project.cursos.edufree.repository.projection;
+import jakarta.validation.Valid;
 
 public interface CursoAdministradorProjection {
     Integer getId();

@@ -1,10 +1,12 @@
 package project.cursos.edufree.dto;
 
+import project.cursos.edufree.model.Rol;
+
 public class UsuarioDTO {
     private Integer id;
     private String nombre;
     private String email;
-    private RolDTO rol;
+    private Rol rol;
 
     public Integer getId() {
         return id;
@@ -30,11 +32,11 @@ public class UsuarioDTO {
         this.email = email;
     }
 
-    public RolDTO getRol() {
+    public Rol getRol() {
         return rol;
     }
 
-    public void setRol(RolDTO rol) {
+    public void setRol(Rol rol) {
         this.rol = rol;
     }
 }

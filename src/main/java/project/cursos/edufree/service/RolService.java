@@ -21,11 +21,6 @@ public class RolService {
         return rolRepository.findAll();
     }
 
-
-    public Optional<Rol> obtenerPorNombre(String nombre) {
-        return rolRepository.findByNombre(nombre);
-    }
-
     public Rol obtenerPorId(Integer id) {
         return rolRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Rol con ID " + id + " no encontrado"));

@@ -63,6 +63,8 @@ public class CursoService {
         }
     }
 
+
+
     public Curso actualizarCurso(Integer id, String nombre, String descripcion, BigDecimal precio, Integer administradorId) {
         Curso curso = cursoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Curso con ID " + id + " no encontrado"));
