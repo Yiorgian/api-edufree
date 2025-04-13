@@ -29,10 +29,13 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
+
     @GetMapping("/dto")
     public ResponseEntity<List<UsuarioDTO>> obtenerTodosDTO() {
         return ResponseEntity.ok(usuarioService.obtenerTodosComoDTO());
     }
+
+
 
     @PostMapping
     public ResponseEntity<Usuario> crearUsuario(@Valid @RequestBody CrearUsuarioDTO dto) {

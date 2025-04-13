@@ -29,11 +29,6 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-
-    public Optional<Usuario> obtenerPorEmail(String email) {
-        return usuarioRepository.findByEmail(email);
-    }
-
     public Usuario obtenerPorId(Integer id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario con ID " + id + " no encontrado"));

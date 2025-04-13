@@ -30,7 +30,6 @@ public class TemaController {
         return ResponseEntity.ok(tema);
     }
 
-
     @GetMapping("/curso/{cursoId}")
     public ResponseEntity<List<Tema>> getTemasByCurso(@PathVariable Integer cursoId) {
         return ResponseEntity.ok(temaService.getTemasByCurso(cursoId));
