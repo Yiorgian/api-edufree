@@ -1,5 +1,6 @@
 package project.cursos.edufree.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.cursos.edufree.dto.Crear_Datos.CrearNotificacionDTO;
@@ -37,7 +38,7 @@ public class NotificacionController {
 
 
     @PostMapping
-    public ResponseEntity<Notificacion> crearNotificacion(@RequestBody CrearNotificacionDTO dto) {
+    public ResponseEntity<Notificacion> crearNotificacion(@Valid @RequestBody CrearNotificacionDTO dto) {
         Notificacion notificacion = notificacionService.crearNotificacion(dto.getUsuarioId(), dto.getMensaje());
         return ResponseEntity.ok(notificacion);
     }

@@ -1,6 +1,10 @@
 package project.cursos.edufree.dto.Crear_Datos;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class CrearTemaDTO {
+
+    @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
     private String descripcion;
     private Integer cursoId;

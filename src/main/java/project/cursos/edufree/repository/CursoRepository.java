@@ -15,7 +15,6 @@ import java.util.List;
 
 @Repository
 public interface CursoRepository  extends JpaRepository<Curso, Integer>{
-    List<Curso> findByAdministradorId(Integer administradorId);
 
     @Query(value = "CALL sp_getCursoDetalle(:cursoId)", nativeQuery = true)
     CursoDetalleProjection obtenerCursoDetalle(@Param("cursoId") Integer cursoId);

@@ -1,10 +1,21 @@
 package project.cursos.edufree.dto.Crear_Datos;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class CrearUsuarioDTO {
+
+    @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
+
+    @NotBlank(message = "El email es obligatorio")
     private String email;
+
+    @NotBlank(message = "Tiene que ingresar una contraseña")
     private String password;
+
+    @NotBlank(message = "Tiene que ingresar su numero")
     private String telefono;
+
     private Integer rolId;
 
     public String getNombre() {

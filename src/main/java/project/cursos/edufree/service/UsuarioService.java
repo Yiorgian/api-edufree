@@ -1,6 +1,7 @@
 package project.cursos.edufree.service;
 
 import org.springframework.stereotype.Service;
+import project.cursos.edufree.exception.ConflictException;
 import project.cursos.edufree.exception.ResourceNotFoundException;
 import project.cursos.edufree.model.Rol;
 import project.cursos.edufree.model.Usuario;
@@ -38,7 +39,15 @@ public class UsuarioService {
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario con ID " + id + " no encontrado"));
     }
 
-    public Usuario crearUsuario(String nombre, String email, String password, String telefono, Integer rolId) {
+    public Usuario CrearUsuario(String nombre, String email, String password, String telefono, Integer rolId) {
+        if (usuarioRepository.existsByEmail(email)) {
+            throw new ConflictException("El email ya está en uso.");
+        }
+
+        if (usuarioRepository.existsByTelefono(telefono)) {
+            throw new ConflictException("El número de teléfono ya está en uso.");
+        }
+
         Rol rol = rolRepository.findById(rolId)
                 .orElseThrow(() -> new ResourceNotFoundException("Rol con ID " + rolId + " no encontrado"));
 

@@ -1,4 +1,5 @@
 package project.cursos.edufree.controller;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.cursos.edufree.dto.Crear_Datos.CrearUsuarioDTO;
@@ -34,8 +35,8 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> crearUsuario(@RequestBody CrearUsuarioDTO dto) {
-        Usuario usuario = usuarioService.crearUsuario(
+    public ResponseEntity<Usuario> crearUsuario(@Valid @RequestBody CrearUsuarioDTO dto) {
+        Usuario usuario = usuarioService.CrearUsuario(
                 dto.getNombre(), dto.getEmail(), dto.getPassword(), dto.getTelefono(), dto.getRolId()
         );
         return ResponseEntity.ok(usuario);

@@ -52,7 +52,6 @@ public class CursoService {
         return dto;
     }
 
-
     public Curso crearCurso(String nombre, String descripcion, BigDecimal precio, Integer administradorId) {
         Optional<Usuario> adminOpt = usuarioRepository.findById(administradorId);
         if (adminOpt.isPresent()) {
@@ -62,7 +61,6 @@ public class CursoService {
             throw new RuntimeException("Administrador no encontrado");
         }
     }
-
 
 
     public Curso actualizarCurso(Integer id, String nombre, String descripcion, BigDecimal precio, Integer administradorId) {

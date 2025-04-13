@@ -1,5 +1,6 @@
 package project.cursos.edufree.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.cursos.edufree.dto.Crear_Datos.CrearSubtemaDTO;
@@ -31,7 +32,7 @@ public class SubtemaController {
     }
 
     @PostMapping
-    public ResponseEntity<Subtema> crear(@RequestBody CrearSubtemaDTO dto) {
+    public ResponseEntity<Subtema> crear(@Valid @RequestBody CrearSubtemaDTO dto) {
         Subtema subtema = subtemaService.crearSubtema(dto.getNombre(), dto.getTiempo(), dto.getTemaId());
         return ResponseEntity.ok(subtema);
     }

@@ -1,5 +1,6 @@
 package project.cursos.edufree.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.cursos.edufree.dto.Crear_Datos.CrearTemaDTO;
@@ -36,7 +37,7 @@ public class TemaController {
     }
 
     @PostMapping
-    public ResponseEntity<Tema> crearTema(@RequestBody CrearTemaDTO dto) {
+    public ResponseEntity<Tema> crearTema(@Valid @RequestBody CrearTemaDTO dto) {
         Tema tema = temaService.crearTema(dto.getNombre(), dto.getDescripcion(), dto.getCursoId());
         return ResponseEntity.ok(tema);
     }
